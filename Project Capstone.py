@@ -1,193 +1,217 @@
-# ================================
-# DATA PRODUK
-# tipe data : Dictionary of Dictionary
-# Struktur: {ID: {"nama": str, "berat": int (gram), "harga": int (rupiah)}}
-# ================================
+# ====== Program Belanja Sayur & Buah ======
+
+# Data produk (CREATE)
 produk_dict = {
-    1: {"nama": "Tomat", "berat": 500, "harga": 8000},
-    2: {"nama": "Cabai rawit Merah", "berat": 150, "harga": 30000},
-    3: {"nama": "Cabai keriting Merah", "berat": 150, "harga": 25000},
-    4: {"nama": "Bawang Merah", "berat": 250, "harga": 17900},
-    5: {"nama": "Bawang Putih", "berat": 250, "harga": 16000},
-    6: {"nama": "Bawang bombay", "berat": 400, "harga": 36000},
-    7: {"nama": "Buncis", "berat": 200, "harga": 7500},
-    8: {"nama": "Pakcoy", "berat": 150, "harga": 4900},
-    9: {"nama": "Wortel", "berat": 500, "harga": 15400},
-    10: {"nama": "Kangkung", "berat": 200, "harga": 5300},
-    11: {"nama": "Terong ungu", "berat": 450, "harga": 9000},
-    12: {"nama": "Timun", "berat": 500, "harga": 10800},
-    13: {"nama": "Kol", "berat": 1000, "harga": 23800},
-    14: {"nama": "Sawi putih", "berat": 600, "harga": 1200},
+    1: {"nama": "Tomat", "kategori": "Buah", "berat": 500, "harga": 8000},
+    2: {"nama": "Cabai rawit Merah", "kategori": "Sayur", "berat": 150, "harga": 30000},
+    3: {"nama": "Cabai keriting Merah", "kategori": "Sayur", "berat": 150, "harga": 25000},
+    4: {"nama": "Bawang Merah", "kategori": "Sayur", "berat": 250, "harga": 17900},
+    5: {"nama": "Bawang Putih", "kategori": "Sayur", "berat": 250, "harga": 16000},
+    6: {"nama": "Bawang bombay", "kategori": "Sayur", "berat": 400, "harga": 36000},
+    7: {"nama": "Buncis", "kategori": "Sayur", "berat": 200, "harga": 7500},
+    8: {"nama": "Pakcoy", "kategori": "Sayur", "berat": 150, "harga": 4900},
+    9: {"nama": "Wortel", "kategori": "Sayur", "berat": 500, "harga": 15400},
+    10: {"nama": "Kangkung", "kategori": "Sayur", "berat": 200, "harga": 5300},
+    11: {"nama": "Terong ungu", "kategori": "Sayur", "berat": 450, "harga": 9000},
+    12: {"nama": "Timun", "kategori": "Buah", "berat": 500, "harga": 10800},
+    13: {"nama": "Kol", "kategori": "Sayur", "berat": 1000, "harga": 23800},
+    14: {"nama": "Sawi putih", "kategori": "Sayur", "berat": 600, "harga": 1200},
+    15: {"nama": "Melon", "kategori": "Buah", "berat": 1500, "harga": 44000},
+    16: {"nama": "Semangka", "kategori": "Buah", "berat": 3000, "harga": 44500},
+    17: {"nama": "Jeruk Lemon", "kategori": "Buah", "berat": 500, "harga": 25000},
+    18: {"nama": "Anggur", "kategori": "Buah", "berat": 500, "harga": 43000},
+    19: {"nama": "Nanas", "kategori": "Buah", "berat": 1000, "harga": 18900},
+    20: {"nama": "Mangga Super", "kategori": "Buah", "berat": 1000, "harga": 53100},
 }
 
-# ================================
-# KERANJANG BELANJA → pakai dictionary
-# Struktur: {nama_produk: {"harga": int, "qty": int, "berat": int}}
-# ================================
+
+# Data keranjang belanja (READ / UPDATE / DELETE)
 keranjang = {}
 
-# ================================
-# FUNGSI INPUT ANGKA (lebih efisien)
-# ================================
-def input_int(prompt):
+# Fungsi input angka agar aman
+def input_int(pesan):
     while True:
         try:
-            return int(input(prompt))
+            return int(input(pesan))
         except ValueError:
-            print("Input harus berupa angka!\n")
+            print("Input harus berupa angka!")
 
-# ================================
-# FUNGSI: Tampilkan semua produk
-# ================================
-def tampilkan_produk():
-    print("\n=== DAFTAR PRODUK ===")
-    for id_produk, info in produk_dict.items():
-        print(f"{id_produk}. {info['nama']} - {info['berat']} gr - Rp{info['harga']}")
-    print()
+# Format angka ke Rupiah
+def format_rupiah(angka):
+    return f"Rp{angka:,}".replace(",", ".")
 
-# ================================
-# FUNGSI: Hitung subtotal satu item → harga * qty
-# ================================
-def hitung_subtotal(item):
-    return item['qty'] * item['harga']
+# ===== CRUD Produk =====
 
-# ================================
-# FUNGSI: Menampilkan isi keranjang + subtotal per item
-# ================================
-def tampilkan_keranjang():
-    print("\n=== KERANJANG BELANJA ===")
-    if not keranjang:
-        print("Keranjang kosong.\n")
-        return 0
-    total = 0
-    for i, (nama, item) in enumerate(keranjang.items(), start=1):
-        subtotal = hitung_subtotal(item)
-        total += subtotal
-        print(f"{i}. {nama} x{item['qty']} - {item['berat']} gr - Rp{subtotal}")
-    print(f"Total Belanja: Rp{total}\n")
-    return total
+# Menampilkan semua kategori produk
+def tampilkan_kategori():
+    kategori_list = list(set(prod['kategori'] for prod in produk_dict.values()))
+    for i, kategori in enumerate(kategori_list, 1):
+        print(f"{i}. {kategori}")
+    return kategori_list
 
-# ================================
-# FUNGSI: Menambah produk ke keranjang
-# ================================
-def tambah_keranjang():
+# Menampilkan semua produk dalam kategori tertentu
+def tampilkan_produk_per_kategori(kategori):
+    produk_kategori = {pid: info for pid, info in produk_dict.items() if info['kategori'] == kategori}
+    for pid, info in produk_kategori.items():
+        print(f"{pid}. {info['nama']} - {info['berat']}gr - {format_rupiah(info['harga'])}")
+    return produk_kategori
+
+# Fitur lihat produk tanpa harus belanja (READ)
+def lihat_produk():
     while True:
-        tampilkan_produk()
-        id_pilihan = input_int("Masukkan ID produk yang ingin dibeli: ")
-        qty = input_int("Jumlah yang ingin dibeli: ")
-        if qty <= 0:
-            print("Jumlah harus lebih dari 0.\n")
+        print("\n=== LIHAT PRODUK ===")
+        kategori_list = tampilkan_kategori()
+        print("0. Kembali")
+
+        pilihan = input_int("Pilih kategori (angka): ")
+        if pilihan == 0:
+            break
+        if 1 <= pilihan <= len(kategori_list):
+            kategori = kategori_list[pilihan - 1]
+            tampilkan_produk_per_kategori(kategori)
+        else:
+            print("Kategori tidak valid.")
+
+# Menampilkan isi keranjang (READ)
+def tampilkan_keranjang():
+    if not keranjang:
+        print("\nKeranjang kosong.")
+        return 0, 0
+
+    print("\n=== KERANJANG BELANJA ===")
+    total, total_berat = 0, 0
+    for i, (nama, item) in enumerate(keranjang.items(), 1):
+        subtotal = item['qty'] * item['harga']
+        berat = item['qty'] * item['berat']
+        total += subtotal
+        total_berat += berat
+        print(f"{i}. {nama} x{item['qty']} - {berat}gr - {format_rupiah(subtotal)}")
+
+    print(f"Total Berat : {total_berat}gr")
+    print(f"Total Harga : {format_rupiah(total)}")
+    return total, total_berat
+
+# ===== CRUD Keranjang =====
+
+# CREATE - Tambah ke keranjang
+def tambah_ke_keranjang():
+    while True:
+        print("\n=== PILIH KATEGORI ===")
+        kategori_list = tampilkan_kategori()
+        print("0. Kembali")
+
+        pilihan = input_int("Pilih kategori (angka): ")
+        if pilihan == 0:
+            break
+        if not (1 <= pilihan <= len(kategori_list)):
+            print("Kategori tidak valid.")
             continue
 
-        produk = produk_dict.get(id_pilihan)
-        if produk:
+        kategori_terpilih = kategori_list[pilihan - 1]
+        produk_kategori = tampilkan_produk_per_kategori(kategori_terpilih)
+
+        while True:
+            print("0. Kembali ke kategori")
+            id_produk = input_int("Masukkan ID produk yang ingin dibeli: ")
+            if id_produk == 0:
+                break
+
+            produk = produk_kategori.get(id_produk)
+            if not produk:
+                print("Produk tidak ditemukan.")
+                continue
+
+            qty = input_int("Jumlah yang ingin dibeli: ")
+            if qty <= 0:
+                print("Jumlah harus lebih dari 0.")
+                continue
             nama = produk['nama']
             if nama in keranjang:
                 keranjang[nama]['qty'] += qty
             else:
-                keranjang[nama] = {
-                    "harga": produk['harga'],
-                    "qty": qty,
-                    "berat": produk['berat']
-                }
-            print(f"{nama} berhasil ditambahkan ke keranjang.\n")
-        else:
-            print("Produk tidak ditemukan.\n")
+                keranjang[nama] = {"harga": produk['harga'], "qty": qty, "berat": produk['berat']}
+            print(f"{nama} berhasil ditambahkan ke keranjang.")
 
-        if input("Tambah produk lain? (y/n): ").lower() != "y":
+# UPDATE - Ubah jumlah item di keranjang
+def ubah_keranjang():
+    while keranjang:
+        tampilkan_keranjang()
+        print("0. Kembali")
+        idx = input_int("Pilih nomor item untuk ubah jumlah: ")
+        if idx == 0:
             break
-
-# ================================
-# FUNGSI: Menghapus item dari keranjang
-# ================================
-def hapus_keranjang():
-    total = tampilkan_keranjang()
-    if total == 0:
-        return
-
-    nama_list = list(keranjang.keys())
-    idx = input_int("Masukkan nomor item yang ingin dihapus: ") - 1
-    if 0 <= idx < len(nama_list):
-        nama = nama_list[idx]
-        konfirmasi = input(f"Yakin ingin menghapus {nama}? (y/n): ").lower()
-        if konfirmasi == "y":
-            del keranjang[nama]
-            print("Item berhasil dihapus.\n")
+        nama_list = list(keranjang)
+        if not (1 <= idx <= len(nama_list)):
+            print("Nomor item tidak valid.")
+            continue
+        nama = nama_list[idx - 1]
+        qty_baru = input_int(f"Masukkan jumlah baru untuk {nama}: ")
+        if qty_baru > 0:
+            keranjang[nama]['qty'] = qty_baru
+            print("Jumlah berhasil diubah.")
         else:
-            print("Penghapusan dibatalkan.\n")
-    else:
-        print("Nomor item tidak valid.\n")
+            print("Jumlah harus lebih dari 0.")
 
-# ================================
-# FUNGSI: Mengubah jumlah item di keranjang
-# ================================
-def ubah_jumlah_keranjang():
-    total = tampilkan_keranjang()
-    if total == 0:
-        return
+# DELETE - Hapus item dari keranjang
+def hapus_keranjang():
+    while keranjang:
+        tampilkan_keranjang()
+        print("0. Kembali")
+        idx = input_int("Pilih nomor item yang ingin dihapus: ")
+        if idx == 0:
+            break
+        nama_list = list(keranjang)
+        if not (1 <= idx <= len(nama_list)):
+            print("Nomor item tidak valid.")
+            continue
+        nama = nama_list[idx - 1]
+        if input(f"Hapus {nama}? (y/n): ").lower() == "y":
+            del keranjang[nama]
+            print("Item dihapus.")
 
-    nama_list = list(keranjang.keys())
-    idx = input_int("Masukkan nomor item yang ingin diubah jumlahnya: ") - 1
-    if 0 <= idx < len(nama_list):
-        nama = nama_list[idx]
-        while True:
-            qty_baru = input_int(f"Masukkan jumlah baru untuk {nama}: ")
-            if qty_baru <= 0:
-                print("Jumlah harus lebih dari 0.\n")
-            else:
-                keranjang[nama]['qty'] = qty_baru
-                print("Jumlah berhasil diubah.\n")
-                break
-    else:
-        print("Nomor item tidak valid.\n")
-
-# ================================
-# FUNGSI: Checkout transaksi
-# ================================
+# Checkout - tampilkan total belanja
 def checkout():
-    total = tampilkan_keranjang()
+    total, total_berat = tampilkan_keranjang()
     if total == 0:
         return
-    if input("Lanjutkan ke checkout? (y/n): ").lower() == "y":
-        print("Checkout berhasil! Terima kasih telah berbelanja.\n")
+    if input("Lanjutkan checkout? (y/n): ").lower() == "y":
+        print("\n=== STRUK BELANJA ===")
+        print(f"Total Berat : {total_berat}gr")
+        print(f"Total Harga : {format_rupiah(total)}")
+        print("Terima kasih telah berbelanja!")
         keranjang.clear()
-    else:
-        print("Checkout dibatalkan.\n")
 
-# ================================
-# FUNGSI: Menu utama aplikasi
-# ================================
-def main_menu():
+# ===== MAIN PROGRAM =====
+
+def main():
     while True:
-        print("=== APLIKASI BELANJA SAYUR ===")
-        print("1. Lihat Produk")
-        print("2. Tambah ke Keranjang")
-        print("3. Lihat Keranjang")
-        print("4. Hapus dari Keranjang")
-        print("5. Ubah Jumlah di Keranjang")
-        print("6. Checkout")
+        print("\n=== MENU UTAMA ===")
+        print("1. Lihat Produk")              # READ
+        print("2. Tambah ke Keranjang")      # CREATE
+        print("3. Lihat Keranjang")          # READ
+        print("4. Ubah Jumlah di Keranjang") # UPDATE
+        print("5. Hapus dari Keranjang")     # DELETE
+        print("6. Checkout")                 
         print("7. Keluar")
 
         pilihan = input("Pilih menu (1-7): ")
         if pilihan == "1":
-            tampilkan_produk()
+            lihat_produk()
         elif pilihan == "2":
-            tambah_keranjang()
+            tambah_ke_keranjang()
         elif pilihan == "3":
             tampilkan_keranjang()
         elif pilihan == "4":
-            hapus_keranjang()
+            ubah_keranjang()
         elif pilihan == "5":
-            ubah_jumlah_keranjang()
+            hapus_keranjang()
         elif pilihan == "6":
             checkout()
         elif pilihan == "7":
-            print("Sampai jumpa, semoga harimu menyenangkan!\n")
+            print("Sampai jumpa!")
             break
         else:
-            print("Pilihan tidak valid.\n")
+            print("Pilihan tidak valid.")
 
-# ================================
-# JALANKAN PROGRAM
-# ================================
-main_menu()
+if __name__ == "__main__":
+    main()
