@@ -1,4 +1,4 @@
-# ====== Data Produk (CREATE) ======
+# ===== Data Produk (CREATE) =====
 produk_dict = {
     1: {"nama": "Tomat", "kategori": "Buah", "berat": 500, "harga": 8000},
     2: {"nama": "Cabai rawit Merah", "kategori": "Sayur", "berat": 150, "harga": 30000},
